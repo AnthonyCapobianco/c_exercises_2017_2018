@@ -12,10 +12,10 @@ int main(void)
     int i = 0;
 
     printf("Veuillez introduire une chaine de charactères:\n");
-    scanf("%s", s);
+    scanf(" %[^\n]", s);
     
-    while (*(p + i) != '\0') ++i;// Get length of s
+    while (*(p + (++i))); // Get length of s
     
-    printf("%i",i);
+    printf("La chaine contient %i charactères.", i);
     return 0;
 }

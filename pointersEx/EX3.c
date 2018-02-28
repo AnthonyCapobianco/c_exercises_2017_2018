@@ -26,6 +26,5 @@ int main(void)
     } while (i < 0 || i > 100);
     
     for (; j < i; ++j) printf("%c", *(p + j));
-    // Is this specter? Looks like it to me. 
     return 0;
 }

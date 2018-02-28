@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MAX_LEN 10
+#define MAX_LEN 100
 
 int main(void) 
 {
