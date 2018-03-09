@@ -16,10 +16,24 @@
 #define INT_MIN -2147483647
 #endif
 
+#ifndef UINT_MIN
+#define UINT_MIN 0
+#endif
+
+#ifndef UINT_MAX
+#define UINT_MAX +4294967295
+#endif
+
+extern int getIntFromString(char*);
+extern int getIntFromStdin(void);
+extern unsigned int getUintFromStdin(void);
+
 extern int printInt(int number);
 extern int sumOfInts(int n1, int n2);
-extern int getIntFromStdin(void);
 extern int areaOfRectangle(int length, int height);
 extern int getAndPrintRectangleArea(void);
+extern int smallestOfTwoNumber(int n1, int n2);
+extern int smallestOfFourNumberFromStdin(void);
+extern int smallestOfNNumberFromStdin(int numberOfNumbersToCompare);
 
 #endif
