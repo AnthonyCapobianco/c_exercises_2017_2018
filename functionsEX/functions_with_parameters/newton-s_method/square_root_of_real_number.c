@@ -4,21 +4,13 @@
 
 
 #ifdef __GNUC__
-inline double squareRootOfReal(register const double xSquared)__attribute__((hot));
-#else
-inline double squareRootOfReal(register const double xSquared);
+inline static double _squareRootOfReal(register const double, register double)__attribute__((hot));
 #endif
 
-inline double
-squareRootOfReal(register const double xSquared) 
+inline static double
+_squareRootOfReal(register const double xSquared, register double xGuess) 
 {
-        #define UCHAR unsigned char
-        #define F_OF_X(xz, x) ((xz * xz) - x)
-        #define F_PRIME_OF_X(x) (x + x)
-
-        register double xGuess = (xSquared / 2);
-
-        for (UCHAR i = 0; i < DBL_DIG; ++i) xGuess -= (F_OF_X(xGuess, xSquared) / F_PRIME_OF_X(xGuess));     
+        for (char i = DBL_DIG; i > 0; --i) xGuess -= ((xGuess * xGuess) - xSquared) / (xGuess + xGuess);
 
         return xGuess;
 }
@@ -26,6 +18,8 @@ squareRootOfReal(register const double xSquared)
 extern void
 checkAndPrintSquareRootOfRealNumber(const double x)
 {
+        #define squareRootOfReal(x) _squareRootOfReal(x, (x * 0.5))
+        
         if (x == 1.0 || x <= 0.0)
         {
                 if (x < 0.0) 
@@ -36,11 +30,13 @@ checkAndPrintSquareRootOfRealNumber(const double x)
                 else if (x == 0.0) printf("0");
                 else if (x == 1.0) printf("1");
         }
-        else printf("%.*G", DBL_DIG, squareRootOfReal(x));
+        else printf("%.*G\n", DBL_DIG, squareRootOfReal(x));
 
+        #undef squareRootOfReal
 
-#if DEBUG_NEWT_SQRT_METHOD == 1
-        assert(squareRootOfReal(x) == sqrt(x));
-#endif
-/* Proven with frama-c. Should be right all the time. */
+        #if DEBUG_NEWT_SQRT_METHOD == 1
+                printf("%i", ((float) sqrt(x) == (float) squareRootOfReal(x)));
+                assert(_squareRootOfReal(x, x * 0.5) == sqrt(x));
+        #endif
 }
+
