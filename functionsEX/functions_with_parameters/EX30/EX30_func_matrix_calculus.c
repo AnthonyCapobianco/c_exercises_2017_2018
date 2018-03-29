@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: MIT 
  * <http://www.opensource.org/licenses/MIT>
  */
-#include <stdio.h>
 #include "matrix_calc.h"
 
 int

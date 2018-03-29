@@ -25,7 +25,7 @@ safer_gets(char *restrict string, int max_str_len)
 }
 
 static inline int
-get_dimension(char *the_dimension)
+get_dimension(char *the_dimension, char the_name)
 {
         int temp = 0;
 
@@ -33,7 +33,7 @@ get_dimension(char *the_dimension)
         {
                 char string[STRING_LIMIT] = "";
 
-                printf("Veuillez introduire la %s de la matrice (Max %i): ", the_dimension, MAX_MATRIX_DIMENSION);
+                printf("Veuillez introduire la %s de la matrice %c (Max %i): ", the_dimension, the_name, MAX_MATRIX_DIMENSION);
                 safer_gets(string, STRING_LIMIT);
 
                 if (string[0] >= '0' && string[0] <= '9')
@@ -70,8 +70,8 @@ new_matrix(char mat_name)
         }
 
         matrix->name = mat_name;
-        matrix->width = get_dimension("longueur");
-        matrix->height = get_dimension("hauteur");
+        matrix->width = get_dimension("longueur", mat_name);
+        matrix->height = get_dimension("hauteur", mat_name);
 
         return matrix;
 }
