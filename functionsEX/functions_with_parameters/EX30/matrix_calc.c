@@ -77,7 +77,7 @@ new_matrix(char mat_name)
 }
 
 static void
-delete_matrix(Matrix_d *mat_list[])
+delete_matrices(Matrix_d *mat_list[])
 {
         for (int i = 0; mat_list[i] != NULL; i++) free(*(mat_list + i));
         exit(EXIT_SUCCESS);
@@ -194,5 +194,5 @@ matrix_menu()
                                 
                 }
         }
-        free(mat_array);
+        delete_matrices(mat_array);
 }
