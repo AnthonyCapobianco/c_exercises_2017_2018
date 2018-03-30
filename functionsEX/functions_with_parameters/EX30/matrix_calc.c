@@ -91,21 +91,23 @@ set_values(Matrix_d *mat)
         puts("A tout moment, tapez \"ret\" (sans guillemets) pour retourner une étape en arrière.\n");
         puts("Veillez introduire la valeur pour:");
 
-        for (int x = 0; x < mat->height; ++x) for (int y = 0; y < mat->width;)
-        {
-                int temp = 0;
-
-                printf("%c(%d,%d) : ", mat->name, x + 1, y + 1);
-
-                safer_gets(string, STRING_LIMIT);
-                
-                if (y > 0 && !strncmp(string, "ret", 3)) y--;
-                else if (sscanf(string, "%d", &temp) == 1)
+        for (int x = 0; x < mat->height; ++x) 
+                for (int y = 0; y < mat->width;)
                 {
-                        mat->m[x][y] = temp;
-                        y++;
+                        int temp = 0;
+
+                        printf("%c(%d,%d) : ", mat->name, x + 1, y + 1);
+
+                        safer_gets(string, STRING_LIMIT);
+                        
+                        if (y > 0 && !strncmp(string, "ret", 3)) y--;
+                        
+                        else if (sscanf(string, "%d", &temp) == 1)
+                        {
+                                mat->m[x][y] = temp;
+                                y++;
+                        }
                 }
-        }
 }
 
 static inline void
