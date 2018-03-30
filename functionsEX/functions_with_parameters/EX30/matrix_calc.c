@@ -119,10 +119,13 @@ print_matrix(Matrix_d *self)
         printf("==========================================================");
         
         printf("\x1B[33m \n");
-        for (int y = 0; y < this.height; ++y, puts("")) for (int x = 0; x < this.width; ++x)
-        {
-                if (this.m[y][x]) printf("\t%d", this.m[y][x]);
-        }
+        
+        for (int y = 0; y < this.height; ++y, puts("")) 
+                for (int x = 0; x < this.width; ++x)
+                {
+                        if (this.m[y][x]) printf("\t%d", this.m[y][x]);
+                }
+
         printf("\x1B[0m \n");
 }
 
