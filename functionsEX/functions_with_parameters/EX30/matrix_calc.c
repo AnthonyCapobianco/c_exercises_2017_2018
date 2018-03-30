@@ -87,16 +87,24 @@ static inline void
 set_values(Matrix_d *mat)
 {
         char string[STRING_LIMIT] = "";
+        
+        puts("A tout moment, tapez \"ret\" (sans guillemets) pour retourner une étape en arrière.\n");
+        puts("Veillez introduire la valeur pour:");
 
-        for (int x = 0; x < mat->height; ++x) for (int y = 0; y < mat->width; ++y)
+        for (int x = 0; x < mat->height; ++x) for (int y = 0; y < mat->width;)
         {
                 int temp = 0;
 
-                printf("Veillez introduire la valeur pour %c(", mat->name);
-                printf("%d,%d) : ", x + 1, y + 1);
+                printf("%c(%d,%d) : ", mat->name, x + 1, y + 1);
 
                 safer_gets(string, STRING_LIMIT);
-                if (sscanf(string, "%d", &temp) == 1) mat->m[x][y] = temp;
+                
+                if (y > 0 && !strncmp(string, "ret", 3)) y--;
+                else if (sscanf(string, "%d", &temp) == 1)
+                {
+                        mat->m[x][y] = temp;
+                        y++;
+                }
         }
 }
 
@@ -106,12 +114,12 @@ print_matrix(Matrix_d *self)
         Matrix_d this = *self;
         
         printf("\nMatrice \'%c\' \n", this.name);
-        printf("%.*s", this.width * 6, "==========================================================");
+        printf("==========================================================");
         
         printf("\x1B[33m \n");
         for (int y = 0; y < this.height; ++y, puts("")) for (int x = 0; x < this.width; ++x)
         {
-                if (this.m[y][x]) printf("%*c%d%*c", this.width, '|', this.m[y][x], this.width - 2 , '|');
+                if (this.m[y][x]) printf("\t%d", this.m[y][x]);
         }
         printf("\x1B[0m \n");
 }
@@ -168,7 +176,8 @@ matrix_menu()
                         "3) Multiplier une des matrices déjà entrée par un entier.\n\t"
                         "4) Tester l\'égalité de deux matrices déjà entrées.\n\t"
                         "5) Effectuer la somme de deux matrices déjà entrée.\n\t"
-                        "6) Multiplier deux matrices déjà entrées.\n\n"
+                        "6) Multiplier deux matrices déjà entrées.\n\t"
+                        "Tapez \"Q\" pour quitter le programme.\n\n"
                         "> "
                       );
                 
@@ -190,9 +199,11 @@ matrix_menu()
                         case '4':
                         case '5':
                         case '6':
-                        default: continue;
                                 
+                        case 'q':
+                        case 'Q': delete_matrices(mat_array);
+                
+                        default: continue;
                 }
         }
-        delete_matrices(mat_array);
 }
