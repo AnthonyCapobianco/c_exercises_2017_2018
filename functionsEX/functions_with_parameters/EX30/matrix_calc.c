@@ -17,7 +17,7 @@ safer_gets(char *restrict string, int max_str_len)
 
         if ((fgot_ptr = fgets(string, max_str_len, stdin)) == NULL)
         {
-                *string = '\0';
+                *fgot_ptr = '\0';
                 ERROR_RET_NULL("fgets");
                 exit(EXIT_FAILURE);
         }
@@ -88,11 +88,12 @@ set_values(Matrix_d *mat)
 {
         char string[STRING_LIMIT] = "";
         
-        puts("A tout moment, tapez \"ret\" (sans guillemets) pour retourner une étape en arrière.\n");
+        puts("A tout moment, tapez \"ret\" (sans guillemets) pour retourner une étape en arrière.");
         puts("Veillez introduire la valeur pour:");
 
-        for (int x = 0; x < mat->height; ++x) 
-                for (int y = 0; y < mat->width;)
+        for (int x = 0, y = 0; x < mat->height; x++, y = 0)
+        {
+                while (y < mat->width)
                 {
                         int temp = 0;
 
@@ -108,6 +109,7 @@ set_values(Matrix_d *mat)
                                 y++;
                         }
                 }
+        }
 }
 
 static inline void
@@ -118,25 +120,27 @@ print_matrix(Matrix_d *self)
         printf("\nMatrice \'%c\' \n", this.name);
         printf("==========================================================");
         
-        printf("\x1B[33m \n");
+        SET_COLOR(FG_YELLOW); ENDL();
         
-        for (int y = 0; y < this.height; ++y, puts("")) 
+        for (int y = 0; y < this.height; ++y, ENDL()) 
                 for (int x = 0; x < this.width; ++x)
                 {
                         if (this.m[y][x]) printf("\t%d", this.m[y][x]);
                 }
 
-        printf("\x1B[0m \n");
+        SET_COLOR(CL_RESET);
 }
 
 static inline Matrix_d**
 init_matrix(void)
 {
-        static Matrix_d *mat_array[3];
+        static Matrix_d *mat_array[MATRICES_TO_CREATE + 1];
         
-        mat_array[0] = new_matrix('A');
-        mat_array[1] = new_matrix('B');
-        mat_array[2] = NULL;
+        static char mat_ID = 'A';
+        
+        for (int i = 0; i < MATRICES_TO_CREATE; i++, mat_ID++) mat_array[i] = new_matrix(mat_ID);
+        
+        mat_array[MATRICES_TO_CREATE] = NULL;
         
         return mat_array;
 }
@@ -160,7 +164,11 @@ show_matrices(Matrix_d *mat_array[])
                 if (string[0] >= '0' && string[0] <= ('0' + i)) break;
                 else
                 {
-                        printf("\x1b[91m Choix incorrecte, veuillez réessayer.\x1b[0m\n");
+                        SET_COLOR(FG_RED);
+                        
+                        printf("Choix incorrecte, veuillez réessayer.");
+                        
+                        SET_COLOR(CL_RESET); ENDL();
                         continue;
                 }
         }

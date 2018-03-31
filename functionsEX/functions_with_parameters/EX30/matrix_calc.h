@@ -9,8 +9,16 @@
 
 #define STRING_LIMIT 100
 #define MAX_MATRIX_DIMENSION 10
+#define MATRICES_TO_CREATE 2
 
 #define ERROR_RET_NULL(x) fprintf(stderr, "ERROR: %s returned NULL in %s:%i", x, __FILE__, __LINE__)
+
+#define FG_YELLOW "33"
+#define FG_RED "91"
+#define CL_RESET "0"
+
+#define SET_COLOR(x) printf("\x1b["x"m")
+#define ENDL() puts("")
 
 typedef struct Matrix_data
 {
