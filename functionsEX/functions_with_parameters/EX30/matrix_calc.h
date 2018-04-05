@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2018 Capobianco A.
- * SPDX-License-Identifier: MIT 
- * <http://www.opensource.org/licenses/MIT>
+ * SPDX-License-Identifier: MITNFA 
+ * <https://fedoraproject.org/wiki/Licensing/MITNFA>
  */
 
 #ifndef _MATRIX_CALC_H_
