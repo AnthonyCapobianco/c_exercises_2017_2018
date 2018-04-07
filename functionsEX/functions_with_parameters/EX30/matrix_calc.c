@@ -245,6 +245,49 @@ multiply_matrix_by_integer(Matrix_d **mat_array[])
         printf("Le résultat à été enregistré dans la matrice %c\n", new_mat->name);
 }
 
+static inline void
+are_matrices_equal(Matrix_d **map[])
+{
+        Matrix_d **this = *map;
+        
+        bool is_equal = true;
+        
+        if (this[0] == NULL || this[1] == NULL) 
+        {
+                SET_COLOR(FG_RED);
+                puts("Aucune matrice à comparer.\n");
+                SET_COLOR(CL_RESET);
+                
+                return;
+        }
+        else
+        {
+                puts("Quelle matrice désirez vous comparer ?");
+                Matrix_d *m_A = *map[show_matrices(*map)];
+                
+                printf("Avec quelle matrice souhaitez vous comparer \'%c\' ?\n", m_A->name);
+                Matrix_d *m_B = *map[show_matrices(*map)];
+                
+                if (m_A->width != m_B->width || m_A->height != m_B->height) is_equal = false;
+                else 
+                {
+                        for (int i = 0; i < m_A->height; i++)
+                                for (int j = 0; j < m_B->width; j++)
+                                {
+                                        if (!(m_A->m[i][j] ^ m_B->m[i][j]))
+                                        {
+                                                is_equal = false;
+                                                break;
+                                        }
+                                }
+                }
+                
+                if (is_equal) printf("La matrice \'%c\' est égale à la matrice \'%c\'\n", m_A->name, m_B->name);
+                else puts("Les matrices sont différente");
+                
+        }
+}
+
 extern void
 matrix_menu()
 {
@@ -273,7 +316,8 @@ matrix_menu()
                                   break;
                         case '3': multiply_matrix_by_integer(&mat_array);
                                   break;
-                        case '4':
+                        case '4': are_matrices_equal(&mat_array);
+                                  break;
                         case '5':
                         case '6':
                                 
