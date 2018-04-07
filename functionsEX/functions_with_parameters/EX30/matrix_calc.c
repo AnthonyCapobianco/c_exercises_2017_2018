@@ -252,7 +252,7 @@ are_matrices_equal(Matrix_d **map[])
         
         bool is_equal = true;
         
-        if (this[0] == NULL || this[1] == NULL) 
+        if (this[0] == NULL || this[1] == NULL)
         {
                 SET_COLOR(FG_RED);
                 puts("Aucune matrice à comparer.\n");
@@ -263,18 +263,19 @@ are_matrices_equal(Matrix_d **map[])
         else
         {
                 puts("Quelle matrice désirez vous comparer ?");
-                Matrix_d *m_A = *map[show_matrices(*map)];
+                Matrix_d *m_A = this[show_matrices(*map)];
                 
                 printf("Avec quelle matrice souhaitez vous comparer \'%c\' ?\n", m_A->name);
-                Matrix_d *m_B = *map[show_matrices(*map)];
+                Matrix_d *m_B = this[show_matrices(*map)];
                 
                 if (m_A->width != m_B->width || m_A->height != m_B->height) is_equal = false;
-                else 
+                else if (m_A == m_B) is_equal = true;
+                else
                 {
-                        for (int i = 0; i < m_A->height; i++)
-                                for (int j = 0; j < m_B->width; j++)
+                        for (int y = 0; y < m_A->height; y++)
+                                for (int x = 0; x < m_B->width; x++)
                                 {
-                                        if (!(m_A->m[i][j] ^ m_B->m[i][j]))
+                                        if (m_A->m[x][y] ^ m_B->m[x][y])
                                         {
                                                 is_equal = false;
                                                 break;
@@ -311,13 +312,13 @@ matrix_menu()
                 switch (string[0])
                 {
                         case '1': set_values(mat_array[show_matrices(mat_array)]);
-                                  break;
+                                break;
                         case '2': print_matrix(mat_array[show_matrices(mat_array)]);
-                                  break;
+                                break;
                         case '3': multiply_matrix_by_integer(&mat_array);
-                                  break;
+                                break;
                         case '4': are_matrices_equal(&mat_array);
-                                  break;
+                                break;
                         case '5':
                         case '6':
                                 
@@ -328,6 +329,4 @@ matrix_menu()
         }
 }
 
-#ifdef fatal_error
 #undef fatal_error
-#endif
