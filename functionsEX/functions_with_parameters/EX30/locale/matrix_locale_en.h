@@ -29,7 +29,7 @@
 #define STRING_WITH_WHICH "With which matrix do you want to compare \'%c\' ?\n"
 
 #define STRING_YAY "Matrix \'%c\' is equal to matrix \'%c\'\n"
-  #define STRING_NOPE "The matrices are different"
+#define STRING_NOPE "The matrices are different"
 
 #define STRING_MAT_MENU																		\
 	"Please choose one of the following:\n\n\t"							\

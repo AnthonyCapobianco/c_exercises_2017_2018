@@ -13,7 +13,6 @@
 
 #define STRING_LIMIT 100
 #define MAX_MATRIX_DIMENSION 10
-#define MATRICES_TO_CREATE 2
 
 #define FG_YELLOW "33"
 #define FG_RED "91"
@@ -33,6 +32,6 @@ typedef struct Matrix_data
 
 } Matrix_d;
 
-extern void matrix_menu(void);
+extern void matrix_menu(const size_t);
 
 #endif

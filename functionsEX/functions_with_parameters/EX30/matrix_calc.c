@@ -34,9 +34,7 @@ do_fatal_error(const char *func_name, int line)
 static inline char*
 safer_gets(char *string, int max_str_len)
 {
-        /*
-         * Get the user input from stdin and exit if fgets returns NULL
-         */
+        /* Get the user input from stdin and exit if fgets returns NULL */
         
         static char *fgot_ptr;
         
@@ -48,9 +46,7 @@ safer_gets(char *string, int max_str_len)
 static inline int
 get_dimension(char *the_dimension, char the_name)
 {
-        /*
-         * Get the maximum dimentions of the two initial matrices from stdin.
-         */
+        /* Get the maximum dimentions of the two initial matrices from stdin. */
         
         int temp = 0;
         
@@ -192,7 +188,7 @@ print_matrix(Matrix_d *self)
 }
 
 static inline Matrix_d**
-init_matrix(void)
+init_matrix(const size_t MAX_MAT_TO_CREATE)
 {
         /*
          * Allocate memory for the (constant) number of matrices to create.
@@ -201,13 +197,13 @@ init_matrix(void)
         
         static Matrix_d **mat_array;
         
-        if ((mat_array = malloc(sizeof mat_array * (MATRICES_TO_CREATE + 1))) == NULL) fatal_error("malloc");
+        if ((mat_array = malloc(sizeof mat_array * (MAX_MAT_TO_CREATE + 1))) == NULL) fatal_error("malloc");
         
         static char mat_ID = 'A';
         
-        for (int i = 0; i < MATRICES_TO_CREATE; i++, mat_ID++) mat_array[i] = new_matrix(mat_ID);
+        for (unsigned int i = 0; i < MAX_MAT_TO_CREATE; i++, mat_ID++) mat_array[i] = new_matrix(mat_ID);
         
-        mat_array[MATRICES_TO_CREATE] = NULL;
+        mat_array[MAX_MAT_TO_CREATE] = NULL;
         
         return mat_array;
 }
@@ -358,9 +354,9 @@ are_matrices_equal(Matrix_d **map[])
 }
 
 extern void
-matrix_menu()
+matrix_menu(const size_t MAX_MAT_TO_CREATE)
 {
-        Matrix_d **mat_array = init_matrix();
+        Matrix_d **mat_array = init_matrix(MAX_MAT_TO_CREATE);
         
         while (true)
         {
