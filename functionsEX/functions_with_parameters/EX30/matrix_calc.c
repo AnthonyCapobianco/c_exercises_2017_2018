@@ -13,6 +13,11 @@
 static inline void
 do_fatal_error(const char *func_name, int line)
 {
+        /*
+         * If a function returns NULL use this to print the 
+         * line and the file where it happened in stderr.
+         */
+        
         fprintf(stderr, "ERROR: %s returned NULL in %s:%i", func_name, __FILE__, line);
         exit(EXIT_FAILURE);
 }
@@ -21,6 +26,9 @@ do_fatal_error(const char *func_name, int line)
 static inline char*
 safer_gets(char *string, int max_str_len)
 {
+        /*
+         * Get the user input from stdin and exit if fgets returns NULL
+         */
         static char *fgot_ptr;
         
         if ((fgot_ptr = fgets(string, max_str_len, stdin)) == NULL) fatal_error("fgets");
@@ -31,6 +39,9 @@ safer_gets(char *string, int max_str_len)
 static inline int
 get_dimension(char *the_dimension, char the_name)
 {
+        /*
+         * Get the maximum dimentions of the two initial matrices from stdin.
+         */
         int temp = 0;
         
         while (true)
@@ -44,6 +55,10 @@ get_dimension(char *the_dimension, char the_name)
                 {
                         if (sscanf(string, "%d", &temp) != 1 || temp > MAX_MATRIX_DIMENSION || temp < 0)
                         {
+                                /*
+                                 * Keep on looping until input is in range.
+                                 */
+                                
                                 temp = 0;
                                 fprintf(stderr, "ERROR: OUT OF RANGE\n");
                                 printf("Important: Veuillez introduire un nombre entier positif entre 1 et %i\n", MAX_MATRIX_DIMENSION);
@@ -53,6 +68,9 @@ get_dimension(char *the_dimension, char the_name)
                 }
                 else
                 {
+                        /*
+                         * Keep on looping if the user entered a character that isn't a number. 
+                         */
                         *string = 0;
                         puts("Veillez réessayer.");
                         continue;
@@ -65,6 +83,14 @@ get_dimension(char *the_dimension, char the_name)
 static inline Matrix_d*
 new_matrix(char mat_name)
 {
+        /*
+         * Allocate memory for a matrix.
+         * The width and height variables come from
+         * a call to the get_dimentions() function. 
+         *
+         * Return a pointer to it.
+         */
+        
         Matrix_d *matrix;
         
         if ((matrix = malloc(sizeof *matrix)) == NULL) fatal_error("malloc");
@@ -79,6 +105,13 @@ new_matrix(char mat_name)
 static inline Matrix_d*
 new_anonymous_matrix(char mat_name, int width, int height)
 {
+        /*
+         * Allocate memory for a matrix.
+         * The width and height variables are parameters.
+         *
+         * Return a pointer to it.
+         */
+        
         Matrix_d *matrix;
         
         if ((matrix = malloc(sizeof *matrix)) == NULL) fatal_error("malloc");
@@ -93,6 +126,10 @@ new_anonymous_matrix(char mat_name, int width, int height)
 static void
 delete_matrices(Matrix_d *mat_list[])
 {
+        /*
+         * Simple garbage collection using the array of pointer to matrices.
+         */
+        
         for (int i = 0; mat_list[i] != NULL; i++) free(*(mat_list + i));
         free(mat_list);
         
@@ -102,6 +139,10 @@ delete_matrices(Matrix_d *mat_list[])
 static inline void
 set_values(Matrix_d *mat)
 {
+        /*
+         * Set the values for the member `m` of a Matrix_d object.
+         */
+        
         char string[STRING_LIMIT] = "";
         
         puts("A tout moment, tapez \"ret\" (sans guillemets) pour retourner une étape en arrière.");
@@ -150,6 +191,11 @@ print_matrix(Matrix_d *self)
 static inline Matrix_d**
 init_matrix(void)
 {
+        /*
+         * Allocate memory for the (constant) number of matrices to create.
+         * Return an array of pointers to Matrix_d objects.
+         */
+        
         static Matrix_d **mat_array;
         
         if ((mat_array = malloc(sizeof mat_array * (MATRICES_TO_CREATE + 1))) == NULL) fatal_error("malloc");
@@ -166,6 +212,11 @@ init_matrix(void)
 static inline int
 show_matrices(Matrix_d *mat_array[])
 {
+        /*
+         * Show a list of matrices from the array of pointers.
+         * Return an int corresponding to the position of the matrix in the array.
+         */
+        
         static int i = 0;
         static char string[3] = "";
         
@@ -197,6 +248,13 @@ show_matrices(Matrix_d *mat_array[])
 static inline Matrix_d**
 add_matrix_to_array(Matrix_d **mat_array[])
 {
+        /*
+         * Using a pointer to the array of pointer to Matrix_d objects
+         * create a new matrix then add it to that array.
+         *
+         * Return the new array.
+         */
+        
         Matrix_d **this = *mat_array;
         static char name = 'A';
         
@@ -248,6 +306,11 @@ multiply_matrix_by_integer(Matrix_d **mat_array[])
 static inline void
 are_matrices_equal(Matrix_d **map[])
 {
+        /*
+         * Check the equality between two EXISTING matrices.
+         * Print to stdout whether they are equal or not. 
+         */
+        
         Matrix_d **this = *map;
         
         bool is_equal = true;
