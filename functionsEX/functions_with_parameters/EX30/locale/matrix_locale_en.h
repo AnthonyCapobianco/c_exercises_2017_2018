@@ -31,15 +31,15 @@
 #define STRING_YAY "Matrix \'%c\' is equal to matrix \'%c\'\n"
 #define STRING_NOPE "The matrices are different"
 
-#define STRING_MAT_MENU																		\
-	"Please choose one of the following:\n\n\t"							\
-	"1) Set values of a matrix.\n\t"										 		\
-	"2) Print an existing matrix.\n\t"											\
-	"3) Multiply an existing matrix by an integer.\n\t"			\
-	"4) Check existing matrices for equality.\n\t"					\
-	"5) Get the sum of two existing matrices.\n\t"					\
-	"6) Multiply a matrix by another.\n\t"									\
-	"Type \"Q\" to quit the program.\n\n"										\
+#define STRING_MAT_MENU						\
+	"Please choose one of the following:\n\n\t"		\
+	"1) Set values of a matrix.\n\t"			\
+	"2) Print an existing matrix.\n\t"			\
+	"3) Multiply an existing matrix by an integer.\n\t"	\
+	"4) Check existing matrices for equality.\n\t"		\
+	"5) Get the sum of two existing matrices.\n\t"		\
+	"6) Multiply a matrix by another.\n\t"			\
+	"Type \"Q\" to quit the program.\n\n"			\
 
 
 #endif

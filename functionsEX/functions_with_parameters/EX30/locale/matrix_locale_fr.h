@@ -31,15 +31,15 @@
 #define STRING_YAY "La matrice \'%c\' est égale à la matrice \'%c\'\n"
 #define STRING_NOPE "Les matrices sont différente"
 
-#define STRING_MAT_MENU																						\
-  "Veuillez choisir une des options suivante:\n\n\t"							\
-  "1) Introduire les données d\'une matrice.\n\t"									\
-  "2) Afficher une des matrices déjà entrées.\n\t"								\
-  "3) Multiplier une des matrices déjà entrée par un entier.\n\t"	\
-  "4) Tester l\'égalité de deux matrices déjà entrées.\n\t"				\
-  "5) Effectuer la somme de deux matrices déjà entrée.\n\t"				\
-  "6) Multiplier deux matrices déjà entrées.\n\t"									\
-  "Tapez \"Q\" pour quitter le programme.\n\n"										\
+#define STRING_MAT_MENU		                																	        \
+        "Veuillez choisir une des options suivante:\n\n\t"		        \
+        "1) Introduire les données d\'une matrice.\n\t"			        \
+        "2) Afficher une des matrices déjà entrées.\n\t"		        \
+        "3) Multiplier une des matrices déjà entrée par un entier.\n\t"	        \
+        "4) Tester l\'égalité de deux matrices déjà entrées.\n\t"	        \
+        "5) Effectuer la somme de deux matrices déjà entrée.\n\t"		\
+        "6) Multiplier deux matrices déjà entrées.\n\t"				\
+        "Tapez \"Q\" pour quitter le programme.\n\n"				\
 
 
 #endif

@@ -356,7 +356,7 @@ are_matrices_equal(Matrix_d **map[])
 extern void
 matrix_menu(const size_t MAX_MAT_TO_CREATE)
 {
-        Matrix_d **mat_array = init_matrix(MAX_MAT_TO_CREATE);
+        static Matrix_d **mat_array; mat_array = init_matrix(MAX_MAT_TO_CREATE);
         
         while (true)
         {
