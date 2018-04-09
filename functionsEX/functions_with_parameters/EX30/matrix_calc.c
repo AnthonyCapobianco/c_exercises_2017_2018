@@ -15,7 +15,7 @@ do_fatal_error(const char *func_name, int line)
 {
         /*
          * If a function returns NULL use this to print the 
-         * line and the file where it happened in stderr.
+         * line and the file where it happened to stderr.
          */
         
         fprintf(stderr, "ERROR: %s returned NULL in %s:%i", func_name, __FILE__, line);
@@ -29,6 +29,7 @@ safer_gets(char *string, int max_str_len)
         /*
          * Get the user input from stdin and exit if fgets returns NULL
          */
+        
         static char *fgot_ptr;
         
         if ((fgot_ptr = fgets(string, max_str_len, stdin)) == NULL) fatal_error("fgets");
@@ -42,6 +43,7 @@ get_dimension(char *the_dimension, char the_name)
         /*
          * Get the maximum dimentions of the two initial matrices from stdin.
          */
+        
         int temp = 0;
         
         while (true)
@@ -71,6 +73,7 @@ get_dimension(char *the_dimension, char the_name)
                         /*
                          * Keep on looping if the user entered a character that isn't a number. 
                          */
+                        
                         *string = 0;
                         puts("Veillez réessayer.");
                         continue;
