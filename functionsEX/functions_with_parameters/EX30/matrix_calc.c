@@ -10,6 +10,14 @@
 #include <string.h>
 #include "matrix_calc.h"
 
+#if !defined(MATRIX_LOCALE_INCLUDED)
+  #if PROGRAM_LOCALE == 'F'
+    #include "locale/matrix_locale_fr.h"
+  #else
+    #include "locale/matrix_locale_en.h"
+  #endif
+#endif
+
 static inline void
 do_fatal_error(const char *func_name, int line)
 {
@@ -50,32 +58,28 @@ get_dimension(char *the_dimension, char the_name)
         {
                 char string[STRING_LIMIT] = "";
                 
-                printf("Veuillez introduire la %s de la matrice %c (Max %i): ", the_dimension, the_name, MAX_MATRIX_DIMENSION);
+                printf(STRING_ASK_DIMENSION, the_dimension, the_name, MAX_MATRIX_DIMENSION);
                 safer_gets(string, STRING_LIMIT);
                 
                 if (string[0] >= '0' && string[0] <= '9')
                 {
                         if (sscanf(string, "%d", &temp) != 1 || temp > MAX_MATRIX_DIMENSION || temp < 0)
                         {
-                                /*
-                                 * Keep on looping until input is in range.
-                                 */
+                                /* Keep on looping until input is in range. */
                                 
                                 temp = 0;
                                 fprintf(stderr, "ERROR: OUT OF RANGE\n");
-                                printf("Important: Veuillez introduire un nombre entier positif entre 1 et %i\n", MAX_MATRIX_DIMENSION);
+                                printf(STRING_REMIND_RANGE, MAX_MATRIX_DIMENSION);
                                 continue;
                         }
                         else break;
                 }
                 else
                 {
-                        /*
-                         * Keep on looping if the user entered a character that isn't a number. 
-                         */
+                        /* Keep on looping if the user entered a character that isn't a number. */
                         
                         *string = 0;
-                        puts("Veillez réessayer.");
+                        puts(STRING_TRY_AGAIN);
                         continue;
                 }
         }
@@ -99,8 +103,8 @@ new_matrix(char mat_name)
         if ((matrix = malloc(sizeof *matrix)) == NULL) fatal_error("malloc");
         
         matrix->name = mat_name;
-        matrix->width = get_dimension("longueur", mat_name);
-        matrix->height = get_dimension("hauteur", mat_name);
+        matrix->width = get_dimension(STRING_WORD_LENGTH, mat_name);
+        matrix->height = get_dimension(STRING_WORD_HEIGHT, mat_name);
         
         return matrix;
 }
@@ -129,9 +133,7 @@ new_anonymous_matrix(char mat_name, int width, int height)
 static void
 delete_matrices(Matrix_d *mat_list[])
 {
-        /*
-         * Simple garbage collection using the array of pointer to matrices.
-         */
+        /* Simple deallocation using the array of pointer to matrices. */
         
         for (int i = 0; mat_list[i] != NULL; i++) free(*(mat_list + i));
         free(mat_list);
@@ -142,14 +144,12 @@ delete_matrices(Matrix_d *mat_list[])
 static inline void
 set_values(Matrix_d *mat)
 {
-        /*
-         * Set the values for the member `m` of a Matrix_d object.
-         */
+        /* Set the values for the member `m` of a Matrix_d object. */
         
         char string[STRING_LIMIT] = "";
         
-        puts("A tout moment, tapez \"ret\" (sans guillemets) pour retourner une étape en arrière.");
-        puts("Veillez introduire la valeur pour:");
+        puts(STRING_USE_RET);
+        puts(STRING_ENTER_VALUE);
         
         for (int x = 0, y = 0; x < mat->height; x++, y = 0)
         {
@@ -177,7 +177,7 @@ print_matrix(Matrix_d *self)
 {
         Matrix_d this = *self;
         
-        printf("\nMatrice \'%c\' \n", this.name);
+        printf("\n"STRING_WORD_MATRIX" \'%c\' \n", this.name);
         printf("==========================================================");
         
         SET_COLOR(FG_YELLOW); ENDL();
@@ -225,7 +225,7 @@ show_matrices(Matrix_d *mat_array[])
         
         while (true)
         {
-                puts("Veuillez choisir une des matrices suivantes:");
+                puts(STRING_CHOOSE_MATRIX);
                 
                 for (i = 0; mat_array[i] != NULL; i++) printf("%d) %c\n", i + 1, mat_array[i]->name);
                 
@@ -238,7 +238,7 @@ show_matrices(Matrix_d *mat_array[])
                 {
                         SET_COLOR(FG_RED);
                         
-                        printf("Choix incorrecte, veuillez réessayer.");
+                        printf(STRING_WRONG_CHOICE " " STRING_TRY_AGAIN);
                         
                         SET_COLOR(CL_RESET); ENDL();
                         continue;
@@ -289,7 +289,7 @@ multiply_matrix_by_integer(Matrix_d **mat_array[])
         int the_number = 0;
         char string[STRING_LIMIT] = "";
         
-        printf("Par quel entier désirez-vous multiplier la matrice %c? ", this->name);
+        printf(STRING_INT_MULT, this->name);
         
         safer_gets(string, STRING_LIMIT);
         
@@ -303,7 +303,7 @@ multiply_matrix_by_integer(Matrix_d **mat_array[])
                         }
         }
         
-        printf("Le résultat à été enregistré dans la matrice %c\n", new_mat->name);
+        printf(STRING_RES_SAVED_IN, new_mat->name);
 }
 
 static inline void
@@ -321,17 +321,17 @@ are_matrices_equal(Matrix_d **map[])
         if (this[0] == NULL || this[1] == NULL)
         {
                 SET_COLOR(FG_RED);
-                puts("Aucune matrice à comparer.\n");
+                puts(STRING_FUCK_ALL);
                 SET_COLOR(CL_RESET);
                 
                 return;
         }
         else
         {
-                puts("Quelle matrice désirez vous comparer ?");
+                puts(STRING_WHICH);
                 Matrix_d *m_A = this[show_matrices(*map)];
                 
-                printf("Avec quelle matrice souhaitez vous comparer \'%c\' ?\n", m_A->name);
+                printf(STRING_WITH_WHICH, m_A->name);
                 Matrix_d *m_B = this[show_matrices(*map)];
                 
                 if (m_A->width != m_B->width || m_A->height != m_B->height) is_equal = false;
@@ -349,9 +349,11 @@ are_matrices_equal(Matrix_d **map[])
                                 }
                 }
                 
-                if (is_equal) printf("La matrice \'%c\' est égale à la matrice \'%c\'\n", m_A->name, m_B->name);
-                else puts("Les matrices sont différente");
-                
+                if (is_equal) printf(STRING_YAY, m_A->name, m_B->name);
+                else 
+                {
+                        puts(STRING_NOPE);
+                }
         }
 }
 
@@ -362,34 +364,34 @@ matrix_menu()
         
         while (true)
         {
-                printf( "Veuillez choisir une des options suivante:\n\n\t"
-                       "1) Introduire les données d\'une matrice.\n\t"
-                       "2) Afficher une des matrices déjà entrées.\n\t"
-                       "3) Multiplier une des matrices déjà entrée par un entier.\n\t"
-                       "4) Tester l\'égalité de deux matrices déjà entrées.\n\t"
-                       "5) Effectuer la somme de deux matrices déjà entrée.\n\t"
-                       "6) Multiplier deux matrices déjà entrées.\n\t"
-                       "Tapez \"Q\" pour quitter le programme.\n\n"
-                       "> "
-                       );
+                printf( STRING_MAT_MENU "> ");
                 
                 char string[STRING_LIMIT] = ""; safer_gets(string, STRING_LIMIT);
                 
                 switch (string[0])
                 {
-                        case '1': set_values(mat_array[show_matrices(mat_array)]);
+                        case '1': 
+                                set_values(mat_array[show_matrices(mat_array)]);
                                 break;
-                        case '2': print_matrix(mat_array[show_matrices(mat_array)]);
+                                
+                        case '2':
+                                print_matrix(mat_array[show_matrices(mat_array)]);
                                 break;
-                        case '3': multiply_matrix_by_integer(&mat_array);
+                                
+                        case '3':
+                                multiply_matrix_by_integer(&mat_array);
                                 break;
-                        case '4': are_matrices_equal(&mat_array);
+                                
+                        case '4': 
+                                are_matrices_equal(&mat_array);
                                 break;
+                                
                         case '5':
                         case '6':
                                 
-                        case 'q':
+                        case 'q': 
                         case 'Q': delete_matrices(mat_array);
+                                
                         default: continue;
                 }
         }

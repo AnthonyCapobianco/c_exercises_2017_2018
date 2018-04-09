@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: MITNFA 
  * <https://fedoraproject.org/wiki/Licensing/MITNFA>
  */
+
 #include "matrix_calc.h"
 
 int
