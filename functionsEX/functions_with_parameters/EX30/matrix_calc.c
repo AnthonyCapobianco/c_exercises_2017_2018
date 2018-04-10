@@ -197,7 +197,7 @@ init_matrix(const size_t MAX_MAT_TO_CREATE)
         
         static Matrix_d **mat_array;
         
-        if ((mat_array = malloc(sizeof mat_array * (MAX_MAT_TO_CREATE + 1))) == NULL) fatal_error("malloc");
+        if ((mat_array = malloc(sizeof (*mat_array) * (MAX_MAT_TO_CREATE + 1))) == NULL) fatal_error("malloc");
         
         static char mat_ID = 'A';
         
@@ -266,7 +266,7 @@ add_matrix_to_array(Matrix_d **mat_array[])
                 nbr_of_matrices++;
         }
         
-        if ((this = realloc(this, (sizeof *mat_array) * (nbr_of_matrices + 2))) == NULL) fatal_error("realloc");
+        if ((this = realloc(this, (sizeof *this) * (nbr_of_matrices + 2))) == NULL) fatal_error("realloc");
         
         static int width; width = this[nbr_of_matrices - 2]->width;
         static int height; height = this[nbr_of_matrices - 2]->height;
