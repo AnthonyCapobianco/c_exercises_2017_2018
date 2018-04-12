@@ -19,7 +19,7 @@
 #endif
 
 static inline void
-do_fatal_error(const char *func_name, int line)
+throw_fatal_error(const char *func_name, int line)
 {
         /*
          * If a function returns NULL use this to print the 
@@ -29,7 +29,7 @@ do_fatal_error(const char *func_name, int line)
         fprintf(stderr, "ERROR: %s returned NULL in %s:%i", func_name, __FILE__, line);
         exit(EXIT_FAILURE);
 }
-#define fatal_error(x) do_fatal_error(x, __LINE__)
+#define fatal_error(x) throw_fatal_error(x, __LINE__)
 
 static inline char*
 safer_gets(char *string, int max_str_len)
@@ -330,13 +330,17 @@ are_matrices_equal(Matrix_d **map[])
                 printf(STRING_WITH_WHICH, m_A->name);
                 Matrix_d *m_B = this[show_matrices(*map)];
                 
+                /* They can't be equal if they have different width and heigh so no need to check. */
                 if (m_A->width != m_B->width || m_A->height != m_B->height) is_equal = false;
+                /* They are obviously equal if they are the same object. No need to check. */
                 else if (m_A == m_B) is_equal = true;
                 else
-                {
+                {       
                         for (int y = 0; y < m_A->height; y++)
                                 for (int x = 0; x < m_B->width; x++)
                                 {
+                                        /* If we find any diffence they aren't equal and we can break. */
+                                        /* I'm not sure if using xor here is faster with a modern compiler. */
                                         if (m_A->m[x][y] ^ m_B->m[x][y])
                                         {
                                                 is_equal = false;
@@ -367,26 +371,35 @@ matrix_menu(const size_t MAX_MAT_TO_CREATE)
                 switch (string[0])
                 {
                         case '1': 
+                                /* 1) Set values of a matrix. */
                                 set_values(mat_array[show_matrices(mat_array)]);
                                 break;
                                 
                         case '2':
+                                /* 2) Print an existing matrix. */
                                 print_matrix(mat_array[show_matrices(mat_array)]);
                                 break;
                                 
                         case '3':
+                                /* 3) Multiply an existing matrix by an integer. */
                                 multiply_matrix_by_integer(&mat_array);
                                 break;
                                 
                         case '4': 
+                                /* 4) Check existing matrices for equality. */
                                 are_matrices_equal(&mat_array);
                                 break;
                                 
                         case '5':
+                                /* 5) Get the sum of two existing matrices. */
+                        
                         case '6':
+                                /* 6) Multiply a matrix by another. */
                                 
                         case 'q': 
-                        case 'Q': delete_matrices(mat_array);
+                        case 'Q': 
+                                /* Type Q to quit the program. */
+                                delete_matrices(mat_array);
                                 
                         default: continue;
                 }
